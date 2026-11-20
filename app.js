@@ -60,6 +60,7 @@ const vistas = {
       : `<li class="card fila" style="padding:8px 12px 8px 14px"><span class="item">${ico("🍺", i)}<span>${esc(p)}</span></span>
         <span class="cont"><button class="redondo" data-act="beer" data-i="${i}" data-d="-1" aria-label="Quitar una cerveza a ${esc(p)}">−</button><b>${estado.beers["p" + i] || 0}</b><button class="redondo mas" data-act="beer" data-i="${i}" data-d="1" aria-label="Añadir una cerveza a ${esc(p)}">+</button></span></li>`;
     return `<div class="pad"><h1 class="h1">🍺 Cerveza</h1>
+      <p class="sub">Pon el número de cervezas que bebes en total durante el finde, es para tener un cálculo aproximado de la compra. Puedes beber más o menos sin problema pero así sabemos más o menos el total.</p>
       <div class="banda fila"><div style="font-size:16px;font-weight:700">🍻 Cervezas totales</div><div class="num" aria-live="polite">${total}</div></div>
       <ul class="lista">${PERSONAS.map(fila).join("")}</ul></div>`;
   },
