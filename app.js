@@ -43,6 +43,10 @@ window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); inst
 window.addEventListener("appinstalled", () => { instalador = null; verAyuda = false; render(); });
 const draft = { nuevoRefresco: "", an: "", am: "", ad: "" };
 
+function resumenRefrescos() {
+  const cuentas = estado.drinks.map(d => [d, PERSONAS.reduce((t, _, i) => t + ((estado.picks["p" + i] || []).includes(d) ? 1 : 0), 0)]);
+  return `<h2 class="h1" style="font-size:24px;margin:24px 0 10px">Resumen</h2><ul class="lista">${cuentas.map(([d, n]) => `<li class="card fila"><span class="item">${ico("cup", 2)}<span>${esc(d)}</span></span><b class="res-n">${n} ${n === 1 ? "persona" : "personas"}</b></li>`).join("")}</ul>`;
+}
 const vistas = {
   inicio() {
     const fondo = CASA.foto ? ` style="background-image:url('${esc(CASA.foto)}'),linear-gradient(160deg,#5B4BB0,#2B5FA0)"` : "";
@@ -92,7 +96,7 @@ const vistas = {
   },
   refrescos() {
     return `<div class="pad"><h1 class="h1">Refrescos</h1><p class="sub">Toca tu nombre y marca lo que vas a beber.</p><ul class="lista">
-      ${PERSONAS.map((p, i) => { const n = (estado.picks["p" + i] || []).length; return `<li><button class="card persona" data-act="abrir" data-i="${i}"><span class="item">${ico("cup", i)}<span>${esc(p)}</span></span><small class="sel">${esc(n ? (estado.picks["p" + i] || []).join(", ") : "Sin elegir")}</small></button></li>`; }).join("")}</ul></div>`;
+      ${PERSONAS.map((p, i) => { const n = (estado.picks["p" + i] || []).length; return `<li><button class="card persona" data-act="abrir" data-i="${i}"><span class="item">${ico("cup", i)}<span>${esc(p)}</span></span><small class="sel">${esc(n ? (estado.picks["p" + i] || []).join(", ") : "Sin elegir")}</small></button></li>`; }).join("")}</ul>${resumenRefrescos()}</div>`;
   },
   actividades() {
     const lista = estado.acts.map((a, i) => `<div class="card act" style="margin-bottom:10px"><div class="item nm">${ico(iconoActividad(a.name), i)}<span>${esc(a.name)}</span></div><div class="etq" style="margin-top:6px">Material</div><div style="font-size:14px">${esc(a.material)}</div><div class="etq" style="margin-top:8px">Explicación</div><div style="font-size:14px">${esc(a.desc)}</div></div>`).join("");

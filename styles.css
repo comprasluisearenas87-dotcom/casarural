@@ -90,3 +90,4 @@ input[type=text],textarea{display:block;width:100%;margin-top:4px;min-height:44p
 .cd b{font-family:var(--f-display);font-style:italic;font-weight:500;font-size:38px;line-height:1;font-variant-numeric:tabular-nums}
 .cd span{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .cuenta .cd-t:only-child{margin:0;font-size:14px}
+.res-n{font-size:14px;font-weight:700;color:var(--brand-ink);white-space:nowrap}
