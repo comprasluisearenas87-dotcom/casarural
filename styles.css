@@ -69,3 +69,5 @@ input[type=text],textarea{display:block;width:100%;margin-top:4px;min-height:44p
 .hero .chip{font-size:14px}
 #tabs button{font-size:13px;white-space:nowrap}
 body{background:linear-gradient(180deg,#FFF6E5 0%,var(--crema) 220px)}
+.persona .item{flex:none}
+.persona .sel{flex:1;min-width:0;margin-left:12px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;font-weight:600;color:var(--azul)}

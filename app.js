@@ -65,7 +65,7 @@ const vistas = {
   },
   refrescos() {
     return `<div class="pad"><h1 class="h1">🥤 Refrescos</h1><p class="sub">Toca tu nombre y marca lo que vas a beber.</p><ul class="lista">
-      ${PERSONAS.map((p, i) => { const n = (estado.picks["p" + i] || []).length; return `<li><button class="card persona" data-act="abrir" data-i="${i}"><span class="item">${ico("🥤", i)}<span>${esc(p)}</span></span><small>${n ? n + (n === 1 ? " bebida" : " bebidas") : "Sin elegir"}</small></button></li>`; }).join("")}</ul></div>`;
+      ${PERSONAS.map((p, i) => { const n = (estado.picks["p" + i] || []).length; return `<li><button class="card persona" data-act="abrir" data-i="${i}"><span class="item">${ico("🥤", i)}<span>${esc(p)}</span></span><small class="sel">${esc(n ? (estado.picks["p" + i] || []).join(", ") : "Sin elegir")}</small></button></li>`; }).join("")}</ul></div>`;
   },
   actividades() {
     const lista = estado.acts.map((a, i) => `<div class="card" style="margin-bottom:10px"><div class="item" style="font-family:'DM Serif Display',serif;font-size:21px">${ico(emojiActividad(a.name), i)}<span>${esc(a.name)}</span></div><div class="etq" style="margin-top:6px">Material</div><div style="font-size:14px">${esc(a.material)}</div><div class="etq" style="margin-top:8px">Explicación</div><div style="font-size:14px">${esc(a.desc)}</div></div>`).join("");
