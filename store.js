@@ -49,11 +49,11 @@ async function iniciarSupabase(onChange) {
     s.acts = ok(a).map((r) => ({ name: r.name, material: r.material, desc: r.descr }));
     onChange(s);
   }
-  await leer();
+  modo.compartido = true;
+  try { await leer(); } catch (e) { modo.compartido = false; throw e; }
   let t = null;
   const refrescar = () => { clearTimeout(t); t = setTimeout(() => leer().catch(() => {}), 150); };
   sb.channel("casa").on("postgres_changes", { event: "*", schema: "public" }, refrescar).subscribe();
-  modo.compartido = true;
   const run = async (q) => { ok(await q); refrescar(); };
   return {
     incBeer: (i, d) => run(sb.rpc("inc_beer", { p: i, d })),
