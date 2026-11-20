@@ -26,6 +26,10 @@ export const COMIDAS = [
 ];
 
 // Texto de cada comida (clave "Día Comida"); lo que no esté pone "Por definir".
-export const MENU = {};
+export const MENU = {
+  "Viernes Cena": "Pizzas, tortilla de patata, empanada y rosca",
+  "Sábado Comida": "Barbacoa: chuletas, chorizo, longaniza, papada y morcilla",
+  "Sábado Cena": "Hamburguesa completa"
+};
 export const DESAYUNOS = "";
 export const PICOTEO = "";

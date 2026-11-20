@@ -30,7 +30,7 @@ const vistas = {
     return `<div class="pad"><h1 class="h1">Asistentes</h1><ul class="lista">${PERSONAS.map((p) => `<li class="card">${esc(p)}</li>`).join("")}</ul></div>`;
   },
   menu() {
-    const fila = (a, b, txt) => `<div class="card fila"><div><div class="etq">${esc(a)}</div><div style="font-size:17px;font-weight:700">${esc(b)}</div></div><div class="gris">${esc(txt || "Por definir")}</div></div>`;
+    const fila = (a, b, txt) => `<div class="card"><div class="etq">${esc(a)}</div><div style="font-size:17px;font-weight:700">${esc(b)}</div><div style="margin-top:4px;font-size:15px;${txt ? "" : "color:#6b7781"}">${esc(txt || "Por definir")}</div></div>`;
     const bloque = (t, txt) => `<div class="card azul"><div style="font-size:17px;font-weight:700">${t}</div><div class="gris">${esc(txt || "Por definir")}</div></div>`;
     return `<div class="pad" style="display:flex;flex-direction:column;gap:10px"><h1 class="h1" style="margin-bottom:2px">Menú</h1>
       ${COMIDAS.map(([d, c]) => fila(d, c, MENU[d + " " + c])).join("")}
