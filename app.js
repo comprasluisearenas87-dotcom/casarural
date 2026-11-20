@@ -1,7 +1,22 @@
 import { CASA, PERSONAS, MENORES, COMIDAS, MENU, DESAYUNOS, PICOTEO } from "./config.js";
 import { iniciar, modo } from "./store.js";
 
-const TABS = [["inicio", "Inicio"], ["gente", "Asistentes"], ["menu", "Menú"], ["cerveza", "Cerveza"], ["refrescos", "Refrescos"], ["actividades", "Actividades"]];
+const TABS = [["inicio", "Inicio", "🏡"], ["gente", "Asistentes", "👨‍👩‍👧‍👦"], ["menu", "Menú", "🍽️"], ["cerveza", "Cerveza", "🍺"], ["refrescos", "Refrescos", "🥤"], ["actividades", "Actividades", "🎲"]];
+const FONDOS = ["#FFE3D3", "#DCEBF7", "#FFF1C9", "#DDF2E3", "#EBDDF7", "#FFDCE5"];
+const ico = (e, i = 0) => `<span class="ico" style="background:${FONDOS[i % FONDOS.length]}" aria-hidden="true">${e}</span>`;
+const emojiActividad = (n) => {
+  const t = n.toLowerCase();
+  if (/beer|cerve|pong/.test(t)) return "🍺";
+  if (/mesa|carta|dado|parch|domin|mus|tute/.test(t)) return "🎲";
+  if (/pisc|nad|agua/.test(t)) return "🏊";
+  if (/senderis|ruta|paseo|monte|caminar/.test(t)) return "🥾";
+  if (/futbol|fútbol|balon|bal[oó]n/.test(t)) return "⚽";
+  if (/petanca|bolos|bolas/.test(t)) return "🎳";
+  if (/m[uú]sica|karaoke|canta|baile|bailar/.test(t)) return "🎤";
+  if (/cine|peli/.test(t)) return "🎬";
+  if (/fuego|hoguera|campamento/.test(t)) return "🔥";
+  return "🎯";
+};
 const $ = (s) => document.querySelector(s);
 const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -19,47 +34,48 @@ const vistas = {
     const mapa = CASA.mapaEmbed
       ? `<iframe title="Mapa de cómo llegar" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="${esc(CASA.mapaEmbed)}"></iframe>`
       : "[Mapa de Google Maps con la ubicación]";
-    return `<div class="hero"${fondo}><span class="chip">Viernes a domingo</span><h1>${esc(CASA.nombre)}</h1><div>${esc(CASA.fecha)}</div></div>
+    return `<div class="hero"${fondo}><span class="chip">🎉 Viernes a domingo</span><h1>${esc(CASA.nombre)}</h1><div>${esc(CASA.fecha)}</div></div>
     <div class="inicio-cuerpo">
       ${CASA.enlace ? `<a class="btn" href="${esc(CASA.enlace)}" target="_blank" rel="noopener">Ver la casa</a>` : ""}
-      <section><h2 style="font-size:22px;margin-bottom:8px">Cómo llegar</h2><div class="mapa">${mapa}</div></section>
+      <section><h2 style="font-size:22px;margin-bottom:8px">📍 Cómo llegar</h2><div class="mapa">${mapa}</div></section>
       ${CASA.mapaEnlace ? `<a class="btn sec" href="${esc(CASA.mapaEnlace)}" target="_blank" rel="noopener">Abrir en Google Maps</a>` : ""}
     </div>`;
   },
   gente() {
-    return `<div class="pad"><h1 class="h1">Asistentes</h1><ul class="lista">${PERSONAS.map((p) => `<li class="card">${esc(p)}</li>`).join("")}</ul></div>`;
+    return `<div class="pad"><h1 class="h1">👨‍👩‍👧‍👦 Asistentes</h1><ul class="lista">${PERSONAS.map((p, i) => `<li class="card item">${ico(MENORES.includes(p) ? "🧒" : "🧑", i)}<span>${esc(p)}</span></li>`).join("")}</ul></div>`;
   },
   menu() {
-    const fila = (a, b, txt) => `<div class="card"><div class="etq">${esc(a)}</div><div style="font-size:17px;font-weight:700">${esc(b)}</div><div style="margin-top:4px;font-size:15px;${txt ? "" : "color:#6b7781"}">${esc(txt || "Por definir")}</div></div>`;
-    const bloque = (t, txt) => `<div class="card azul"><div style="font-size:17px;font-weight:700">${t}</div><div class="gris">${esc(txt || "Por definir")}</div></div>`;
-    return `<div class="pad" style="display:flex;flex-direction:column;gap:10px"><h1 class="h1" style="margin-bottom:2px">Menú</h1>
-      ${COMIDAS.map(([d, c]) => fila(d, c, MENU[d + " " + c])).join("")}
-      ${bloque("Desayunos", DESAYUNOS)}${bloque("Picoteo", PICOTEO)}</div>`;
+    const EM = { Comida: "🍽️", Cena: "🌙", Recena: "🍕" };
+    const fila = (a, b, txt, i) => `<div class="card item" style="align-items:flex-start">${ico(EM[b] || "🍽️", i)}<div style="flex:1;min-width:0"><div class="etq">${esc(a)}</div><div style="font-size:17px;font-weight:700">${esc(b)}</div><div style="margin-top:4px;font-size:15px;${txt ? "" : "color:#6b7781"}">${esc(txt || "Por definir")}</div></div></div>`;
+    const bloque = (t, txt, e) => `<div class="card azul item" style="align-items:flex-start"><span class="ico" style="background:rgba(255,255,255,.2)" aria-hidden="true">${e}</span><div><div style="font-size:17px;font-weight:700">${t}</div><div class="gris">${esc(txt || "Por definir")}</div></div></div>`;
+    return `<div class="pad" style="display:flex;flex-direction:column;gap:10px"><h1 class="h1" style="margin-bottom:2px">🍽️ Menú</h1>
+      ${COMIDAS.map(([d, c], i) => fila(d, c, MENU[d + " " + c], i)).join("")}
+      ${bloque("Desayunos", DESAYUNOS, "☕")}${bloque("Picoteo", PICOTEO, "🧀")}</div>`;
   },
   cerveza() {
     const total = PERSONAS.reduce((a, p, i) => a + (MENORES.includes(p) ? 0 : (estado.beers["p" + i] || 0)), 0);
     const fila = (p, i) => MENORES.includes(p)
-      ? `<li class="card fila menor" style="padding:8px 12px 8px 18px"><span>${esc(p)} <small>· menor</small></span>
+      ? `<li class="card fila menor" style="padding:8px 12px 8px 18px"><span class="item">${ico("🧒", i)}<span>${esc(p)} <small>· menor</small></span></span>
         <span class="cont"><button class="redondo" disabled aria-label="${esc(p)} es menor: no se puede añadir">−</button><b>–</b><button class="redondo mas" disabled aria-label="${esc(p)} es menor: no se puede añadir">+</button></span></li>`
-      : `<li class="card fila" style="padding:8px 12px 8px 18px"><span>${esc(p)}</span>
+      : `<li class="card fila" style="padding:8px 12px 8px 14px"><span class="item">${ico("🍺", i)}<span>${esc(p)}</span></span>
         <span class="cont"><button class="redondo" data-act="beer" data-i="${i}" data-d="-1" aria-label="Quitar una cerveza a ${esc(p)}">−</button><b>${estado.beers["p" + i] || 0}</b><button class="redondo mas" data-act="beer" data-i="${i}" data-d="1" aria-label="Añadir una cerveza a ${esc(p)}">+</button></span></li>`;
-    return `<div class="pad"><h1 class="h1">Cerveza</h1>
-      <div class="banda fila"><div style="font-size:16px;font-weight:700">Cervezas totales</div><div class="num" aria-live="polite">${total}</div></div>
+    return `<div class="pad"><h1 class="h1">🍺 Cerveza</h1>
+      <div class="banda fila"><div style="font-size:16px;font-weight:700">🍻 Cervezas totales</div><div class="num" aria-live="polite">${total}</div></div>
       <ul class="lista">${PERSONAS.map(fila).join("")}</ul></div>`;
   },
   refrescos() {
-    return `<div class="pad"><h1 class="h1">Refrescos</h1><p class="sub">Toca tu nombre y marca lo que vas a beber.</p><ul class="lista">
-      ${PERSONAS.map((p, i) => { const n = (estado.picks["p" + i] || []).length; return `<li><button class="card persona" data-act="abrir" data-i="${i}"><span>${esc(p)}</span><small>${n ? n + (n === 1 ? " bebida" : " bebidas") : "Sin elegir"}</small></button></li>`; }).join("")}</ul></div>`;
+    return `<div class="pad"><h1 class="h1">🥤 Refrescos</h1><p class="sub">Toca tu nombre y marca lo que vas a beber.</p><ul class="lista">
+      ${PERSONAS.map((p, i) => { const n = (estado.picks["p" + i] || []).length; return `<li><button class="card persona" data-act="abrir" data-i="${i}"><span class="item">${ico("🥤", i)}<span>${esc(p)}</span></span><small>${n ? n + (n === 1 ? " bebida" : " bebidas") : "Sin elegir"}</small></button></li>`; }).join("")}</ul></div>`;
   },
   actividades() {
-    const lista = estado.acts.map((a) => `<div class="card" style="margin-bottom:10px"><div style="font-family:'DM Serif Display',serif;font-size:21px">${esc(a.name)}</div><div class="etq" style="margin-top:6px">Material</div><div style="font-size:14px">${esc(a.material)}</div><div class="etq" style="margin-top:8px">Explicación</div><div style="font-size:14px">${esc(a.desc)}</div></div>`).join("");
+    const lista = estado.acts.map((a, i) => `<div class="card" style="margin-bottom:10px"><div class="item" style="font-family:'DM Serif Display',serif;font-size:21px">${ico(emojiActividad(a.name), i)}<span>${esc(a.name)}</span></div><div class="etq" style="margin-top:6px">Material</div><div style="font-size:14px">${esc(a.material)}</div><div class="etq" style="margin-top:8px">Explicación</div><div style="font-size:14px">${esc(a.desc)}</div></div>`).join("");
     const form = formAct
       ? `<form class="form" data-act="guardarAct"><label class="campo">Nombre de la actividad<input type="text" id="an" required value="${esc(draft.an)}" autocomplete="off"></label>
         <label class="campo">Material necesario<input type="text" id="am" value="${esc(draft.am)}" autocomplete="off"></label>
         <label class="campo">Breve explicación<textarea id="ad" rows="3">${esc(draft.ad)}</textarea></label>
         <div class="botones"><button class="btn" type="submit">Guardar</button><button class="btn sec" type="button" data-act="cancelarAct">Cancelar</button></div></form>`
-      : `<button class="btn" style="width:100%" data-act="nuevaAct">+ Añadir actividad</button>`;
-    return `<div class="pad"><h1 class="h1">Actividades</h1>${estado.acts.length ? lista : '<div class="vacio">Aún no hay actividades. Añade la primera.</div>'}${form}</div>`;
+      : `<button class="btn" style="width:100%" data-act="nuevaAct">🎉 Añadir actividad</button>`;
+    return `<div class="pad"><h1 class="h1">🎲 Actividades</h1>${estado.acts.length ? lista : '<div class="vacio">Aún no hay actividades. Añade la primera.</div>'}${form}</div>`;
   }
 };
 
@@ -71,7 +87,7 @@ function render() {
   const y = main.scrollTop;
   main.innerHTML = aviso + vistas[tab]();
   main.scrollTop = y;
-  $("#tabs").innerHTML = TABS.map(([id, t]) => `<button data-act="tab" data-id="${id}"${id === tab ? ' aria-current="page"' : ""}>${t}</button>`).join("");
+  $("#tabs").innerHTML = TABS.map(([id, t, e]) => `<button data-act="tab" data-id="${id}"${id === tab ? ' aria-current="page"' : ""}><span aria-hidden="true">${e}</span> ${t}</button>`).join("");
   renderModal();
   if (foco) { const el = document.getElementById(foco); if (el) { el.focus(); try { el.setSelectionRange(pos, pos); } catch (e) {} } }
 }
@@ -83,7 +99,7 @@ function renderModal() {
   m.hidden = false;
   m.innerHTML = `<div class="hoja" role="dialog" aria-modal="true" aria-label="Refrescos de ${esc(PERSONAS[abierta])}">
     <div class="fila" style="margin-bottom:12px"><h2>${esc(PERSONAS[abierta])}</h2><button class="btn" style="min-height:44px" data-act="cerrar">Listo</button></div>
-    <div class="lista" style="gap:6px">${estado.drinks.map((d) => `<label class="check"><input type="checkbox" data-act="pick" data-d="${esc(d)}"${marcados.includes(d) ? " checked" : ""}>${esc(d)}</label>`).join("")}</div>
+    <div class="lista" style="gap:6px">${estado.drinks.map((d) => `<label class="check"><span aria-hidden="true">🥤</span><input type="checkbox" data-act="pick" data-d="${esc(d)}"${marcados.includes(d) ? " checked" : ""}>${esc(d)}</label>`).join("")}</div>
     <form class="botones" style="margin-top:12px" data-act="nuevoRefresco"><input type="text" id="nr" aria-label="Nuevo refresco" placeholder="Añadir otro refresco" value="${esc(draft.nuevoRefresco)}" autocomplete="off" style="margin:0"><button class="btn" type="submit" style="flex:0 0 auto">Añadir</button></form></div>`;
 }
 

@@ -60,3 +60,12 @@ input[type=text],textarea{display:block;width:100%;margin-top:4px;min-height:44p
 .menor{background:#E9E9E9;color:#8a8f94;box-shadow:none}
 .menor small{font-size:12px}
 .menor .redondo,.menor .redondo.mas{background:#DADADA;border:1px solid #CFCFCF;color:#9aa0a5;cursor:not-allowed}
+
+.item{display:flex;align-items:center;gap:12px}
+.ico{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:22px;flex:none;line-height:1}
+.menor .ico{filter:grayscale(1);opacity:.6;background:#DADADA !important}
+.persona .item{flex:1;min-width:0}
+.check span{font-size:20px}
+.hero .chip{font-size:14px}
+#tabs button{font-size:13px;white-space:nowrap}
+body{background:linear-gradient(180deg,#FFF6E5 0%,var(--crema) 220px)}
