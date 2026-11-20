@@ -17,6 +17,15 @@ const iconoActividad = (n) => {
   if (/fuego|hoguera|campamento/.test(t)) return "flame";
   return "target";
 };
+const pad2 = (n) => String(n).padStart(2, "0");
+const cuenta = () => {
+  const ahora = Date.now(), t0 = new Date(CASA.inicio).getTime(), t1 = new Date(CASA.fin).getTime();
+  if (ahora < t0) {
+    const m = Math.floor((t0 - ahora) / 60000);
+    return { fase: "antes", d: Math.floor(m / 1440), h: Math.floor((m % 1440) / 60), m: m % 60 };
+  }
+  return { fase: ahora <= t1 ? "durante" : "despues" };
+};
 const $ = (s) => document.querySelector(s);
 const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -44,8 +53,14 @@ const vistas = {
     const instalar = instalada() ? "" : `<section class="card instalar"><div class="item">${ico("phone", 4)}<div style="flex:1"><div style="font-weight:700">Instala la app en tu móvil</div><div class="gris" style="font-size:13px">Se abre como una app, sin tiendas.</div></div></div>
       <button class="btn" style="width:100%;margin-top:10px" data-act="instalar">Instalar</button>
       ${verAyuda ? `<p class="ayuda">${esIOS ? "En el iPhone: abre esta página en <b>Safari</b>, pulsa <b>Compartir</b> (el cuadrado con la flecha hacia arriba) y elige <b>Añadir a pantalla de inicio</b>." : "En Android: abre el menú <b>⋮</b> de Chrome y pulsa <b>Instalar app</b> (o <b>Añadir a pantalla de inicio</b>)."}</p>` : ""}</section>`;
-    return `<div class="hero${CASA.foto ? " foto" : ""}"${fondo}><span class="chip">Viernes a domingo</span><h1>${esc(CASA.nombre)}</h1><div>${esc(CASA.fecha)}</div></div>
+    const c = cuenta();
+    const unidad = (k, v, et, col) => `<div class="cd" style="background:${col}"><b data-cd="${k}">${pad2(v)}</b><span>${et}</span></div>`;
+    const reloj = c.fase === "antes"
+      ? `<section class="cuenta" aria-label="Cuenta atrás para el fin de semana"><div class="cd-t">Faltan</div><div class="cd-fila">${unidad("d", c.d, "días", "var(--amarillo)")}${unidad("h", c.h, "horas", "var(--rosa)")}${unidad("m", c.m, "min", "var(--menta)")}</div></section>`
+      : `<section class="cuenta"><div class="cd-t">${c.fase === "durante" ? "¡Ya es el fin de semana!" : "Hasta la próxima"}</div></section>`;
+    return `<div class="hero${CASA.foto ? " foto" : ""}"${fondo}><span class="chip">Viernes a domingo</span><div class="fecha">${esc(CASA.dias || CASA.fecha)}<small>${esc(CASA.anio || "")}</small></div><h1>${esc(CASA.nombre)}</h1></div>
     <div class="inicio-cuerpo">
+      ${reloj}
       ${instalar}
       ${CASA.enlace ? `<a class="btn" href="${esc(CASA.enlace)}" target="_blank" rel="noopener">Ver la casa</a>` : ""}
       <section><h2 style="font-size:22px;margin-bottom:8px">Cómo llegar</h2><div class="mapa">${mapa}</div></section>
@@ -164,6 +179,15 @@ document.addEventListener("submit", (e) => {
 });
 
 window.addEventListener("hashchange", () => { const t = location.hash.slice(1); if (TABS.some(([id]) => id === t) && t !== tab) { tab = t; render(); } });
+
+let faseVista = cuenta().fase;
+setInterval(() => {
+  const c = cuenta();
+  if (c.fase !== faseVista) { faseVista = c.fase; render(); return; }
+  if (c.fase !== "antes") return;
+  const set = (k, v) => { const el = document.querySelector(`[data-cd="${k}"]`); if (el) el.textContent = pad2(v); };
+  set("d", c.d); set("h", c.h); set("m", c.m);
+}, 15000);
 
 render();
 iniciar((s) => { estado = s; render(); }).then((s) => { store = s; });

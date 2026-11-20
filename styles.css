@@ -78,3 +78,15 @@ input[type=text],textarea{display:block;width:100%;margin-top:4px;min-height:44p
 .menor{opacity:.55;filter:grayscale(1);background:var(--surface-2)}
 .menor small{font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 .menor .redondo,.menor .redondo.mas{background:#DADADA;border-color:#CFCFCF;color:#9aa0a5;cursor:not-allowed}
+
+.hero .fecha{font-family:var(--f-display);font-style:italic;font-weight:500;font-size:48px;line-height:1;letter-spacing:-.02em;margin-top:14px;display:flex;align-items:baseline;flex-wrap:wrap;gap:0 10px}
+.hero .fecha small{font-size:22px;font-style:normal;font-family:var(--f-text);font-weight:700;letter-spacing:.04em;opacity:.9}
+.hero h1{font-size:26px;margin:8px 0 0}
+.hero{min-height:290px}
+.cuenta{background:var(--surface);border:var(--bd) solid var(--line);border-radius:var(--r);padding:12px 14px 14px}
+.cd-t{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:8px}
+.cd-fila{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.cd{border-radius:calc(var(--r)*.7);padding:10px 4px;text-align:center;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:2px}
+.cd b{font-family:var(--f-display);font-style:italic;font-weight:500;font-size:38px;line-height:1;font-variant-numeric:tabular-nums}
+.cd span{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.cuenta .cd-t:only-child{margin:0;font-size:14px}
