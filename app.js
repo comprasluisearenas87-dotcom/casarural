@@ -26,6 +26,12 @@ let tab = (location.hash || "#inicio").slice(1);
 if (!TABS.some(([id]) => id === tab)) tab = "inicio";
 let abierta = -1;               // persona con la ventana de refrescos abierta
 let formAct = false;            // formulario de actividades visible
+let instalador = null;           // evento de instalación de Chrome/Android
+let verAyuda = false;            // instrucciones manuales de instalación
+const instalada = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+const esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); instalador = e; render(); });
+window.addEventListener("appinstalled", () => { instalador = null; verAyuda = false; render(); });
 const draft = { nuevoRefresco: "", an: "", am: "", ad: "" };
 
 const vistas = {
@@ -34,8 +40,13 @@ const vistas = {
     const mapa = CASA.mapaEmbed
       ? `<iframe title="Mapa de cómo llegar" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="${esc(CASA.mapaEmbed)}"></iframe>`
       : "[Mapa de Google Maps con la ubicación]";
+
+    const instalar = instalada() ? "" : `<section class="card instalar"><div class="item"><span class="ico" style="background:#DCEBF7" aria-hidden="true">📲</span><div style="flex:1"><div style="font-weight:800">Instala la app en tu móvil</div><div class="gris" style="font-size:13px">Se abre como una app, sin tiendas.</div></div></div>
+      <button class="btn" style="width:100%;margin-top:10px" data-act="instalar">Instalar</button>
+      ${verAyuda ? `<p class="ayuda">${esIOS ? "En el iPhone: abre esta página en <b>Safari</b>, pulsa <b>Compartir</b> (el cuadrado con la flecha hacia arriba) y elige <b>Añadir a pantalla de inicio</b>." : "En Android: abre el menú <b>⋮</b> de Chrome y pulsa <b>Instalar app</b> (o <b>Añadir a pantalla de inicio</b>)."}</p>` : ""}</section>`;
     return `<div class="hero"${fondo}><span class="chip">🎉 Viernes a domingo</span><h1>${esc(CASA.nombre)}</h1><div>${esc(CASA.fecha)}</div></div>
     <div class="inicio-cuerpo">
+      ${instalar}
       ${CASA.enlace ? `<a class="btn" href="${esc(CASA.enlace)}" target="_blank" rel="noopener">Ver la casa</a>` : ""}
       <section><h2 style="font-size:22px;margin-bottom:8px">📍 Cómo llegar</h2><div class="mapa">${mapa}</div></section>
       ${CASA.mapaEnlace ? `<a class="btn sec" href="${esc(CASA.mapaEnlace)}" target="_blank" rel="noopener">Abrir en Google Maps</a>` : ""}
@@ -111,6 +122,10 @@ document.addEventListener("click", (e) => {
   if (a === "tab") { tab = b.dataset.id; location.hash = tab; abierta = -1; render(); $("#main").scrollTop = 0; }
   else if (a === "beer") { const d = Number(b.dataset.d); if (d < 0 && !(estado.beers["p" + i] > 0)) return; store.incBeer(i, d); }
   else if (a === "abrir") { abierta = i; renderModal(); }
+  else if (a === "instalar") {
+    if (instalador) { instalador.prompt(); instalador.userChoice.finally(() => { instalador = null; render(); }); }
+    else { verAyuda = !verAyuda; render(); }
+  }
   else if (a === "cerrar") { abierta = -1; renderModal(); }
   else if (a === "nuevaAct") { formAct = true; render(); const f = document.getElementById("an"); if (f) f.focus(); }
   else if (a === "cancelarAct") { formAct = false; draft.an = draft.am = draft.ad = ""; render(); }
