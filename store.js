@@ -4,12 +4,12 @@ import { REFRESCOS_INICIALES } from "./config.js";
 // Estado compartido: beers {p0:n}, picks {p0:[refrescos]}, drinks [refrescos], acts [{name,material,desc}]
 const vacio = () => ({ beers: {}, picks: {}, drinks: REFRESCOS_INICIALES.slice(), acts: [] });
 
-export const modo = { compartido: false };
+export const modo = { compartido: false, error: "" };
 
 export async function iniciar(onChange) {
   if (supabaseConfig && supabaseConfig.anonKey) {
     try { return await iniciarSupabase(onChange); }
-    catch (e) { console.warn("Supabase no disponible, uso modo local", e); }
+    catch (e) { console.warn("Supabase no disponible, uso modo local", e); modo.error = (e && (e.message || e.details || e.code)) || String(e); }
   }
   return iniciarLocal(onChange);
 }
@@ -33,7 +33,7 @@ function iniciarLocal(onChange) {
 }
 
 async function iniciarSupabase(onChange) {
-  const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm");
+  const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm");
   const sb = createClient(supabaseConfig.url, supabaseConfig.anonKey);
   const ok = (r) => { if (r.error) throw r.error; return r.data; };
   async function leer() {

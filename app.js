@@ -62,7 +62,7 @@ const vistas = {
 function render() {
   const foco = document.activeElement && document.activeElement.id;
   const pos = foco ? document.activeElement.selectionStart : null;
-  const aviso = modo.compartido ? "" : `<p class="aviso">Modo local: los datos solo se guardan en este móvil.</p>`;
+  const aviso = modo.compartido ? "" : `<p class="aviso">Modo local: los datos solo se guardan en este móvil.${modo.error ? `<br><small>Motivo: ${esc(modo.error)}</small>` : ""}</p>`;
   const main = $("#main");
   const y = main.scrollTop;
   main.innerHTML = aviso + vistas[tab]();
