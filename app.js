@@ -1,4 +1,4 @@
-import { CASA, PERSONAS, COMIDAS, MENU, DESAYUNOS, PICOTEO } from "./config.js";
+import { CASA, PERSONAS, MENORES, COMIDAS, MENU, DESAYUNOS, PICOTEO } from "./config.js";
 import { iniciar, modo } from "./store.js";
 
 const TABS = [["inicio", "Inicio"], ["gente", "Asistentes"], ["menu", "Menú"], ["cerveza", "Cerveza"], ["refrescos", "Refrescos"], ["actividades", "Actividades"]];
@@ -37,11 +37,15 @@ const vistas = {
       ${bloque("Desayunos", DESAYUNOS)}${bloque("Picoteo", PICOTEO)}</div>`;
   },
   cerveza() {
-    const total = PERSONAS.reduce((a, _, i) => a + (estado.beers["p" + i] || 0), 0);
+    const total = PERSONAS.reduce((a, p, i) => a + (MENORES.includes(p) ? 0 : (estado.beers["p" + i] || 0)), 0);
+    const fila = (p, i) => MENORES.includes(p)
+      ? `<li class="card fila menor" style="padding:8px 12px 8px 18px"><span>${esc(p)} <small>· menor</small></span>
+        <span class="cont"><button class="redondo" disabled aria-label="${esc(p)} es menor: no se puede añadir">−</button><b>–</b><button class="redondo mas" disabled aria-label="${esc(p)} es menor: no se puede añadir">+</button></span></li>`
+      : `<li class="card fila" style="padding:8px 12px 8px 18px"><span>${esc(p)}</span>
+        <span class="cont"><button class="redondo" data-act="beer" data-i="${i}" data-d="-1" aria-label="Quitar una cerveza a ${esc(p)}">−</button><b>${estado.beers["p" + i] || 0}</b><button class="redondo mas" data-act="beer" data-i="${i}" data-d="1" aria-label="Añadir una cerveza a ${esc(p)}">+</button></span></li>`;
     return `<div class="pad"><h1 class="h1">Cerveza</h1>
       <div class="banda fila"><div style="font-size:16px;font-weight:700">Cervezas totales</div><div class="num" aria-live="polite">${total}</div></div>
-      <ul class="lista">${PERSONAS.map((p, i) => `<li class="card fila" style="padding:8px 12px 8px 18px"><span>${esc(p)}</span>
-        <span class="cont"><button class="redondo" data-act="beer" data-i="${i}" data-d="-1" aria-label="Quitar una cerveza a ${esc(p)}">−</button><b>${estado.beers["p" + i] || 0}</b><button class="redondo mas" data-act="beer" data-i="${i}" data-d="1" aria-label="Añadir una cerveza a ${esc(p)}">+</button></span></li>`).join("")}</ul></div>`;
+      <ul class="lista">${PERSONAS.map(fila).join("")}</ul></div>`;
   },
   refrescos() {
     return `<div class="pad"><h1 class="h1">Refrescos</h1><p class="sub">Toca tu nombre y marca lo que vas a beber.</p><ul class="lista">

@@ -10,6 +10,9 @@ export const CASA = {
 
 export const PERSONAS = ["Alberto", "Alejandro", "Angela", "Blanca", "Celia", "Cuqui", "David", "Edu Embid", "Eduardo", "Jessica", "Jesús", "Josemari", "Luise", "María A.", "María E.", "Marivi", "Martín", "Miguel", "Mónica", "Nuri", "Paco", "Paula", "Pili", "Piluca", "Silvia", "Víctor"];
 
+// Menores de edad: en la pestaña Cerveza salen bloqueados en gris, sin poder añadir.
+export const MENORES = ["Paula", "Celia", "Angela", "Martín", "Blanca"];
+
 export const REFRESCOS_INICIALES = [
   "Coca-Cola original",
   "Coca-Cola Zero",
