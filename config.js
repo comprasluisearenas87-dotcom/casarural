@@ -8,7 +8,7 @@ export const CASA = {
   mapaEnlace: "https://www.google.com/maps?q=41.8288136,-3.0651936"     // Enlace normal de Google Maps (abre la app de mapas)
 };
 
-export const PERSONAS = ["Alberto", "Angela", "Blanca", "Celia", "Edu Embid", "Eduardo", "Jessica", "Jesús", "Josemari", "Luise", "María A.", "María E.", "Marivi", "Martín", "Miguel", "Mónica", "Nuri", "Paco", "Paula", "Pili", "Piluca", "Silvia"];
+export const PERSONAS = ["Alberto", "Angela", "Blanca", "Celia", "Edu Embid", "Eduardo", "Jessica", "Jesús", "Josemari", "Luise", "María A.", "María E.", "Marivi", "Martín", "Miguel", "Mónica", "Nuri", "Paco", "Paula", "Pili", "Piluca", "Silvia", "Víctor"];
 
 export const REFRESCOS_INICIALES = [
   "Coca-Cola original",
