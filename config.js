@@ -4,7 +4,7 @@ export const CASA = {
   fecha: "12-14 de marzo de 2027",
   dias: "12–14 marzo",   // fecha grande de la portada
   anio: "2027",
-  inicio: "2027-03-12T00:00:00+01:00",   // arranque de la cuenta atrás (cámbialo a la hora de llegada, p. ej. 18:00)
+  inicio: "2027-03-12T16:00:00+01:00",   // arranque de la cuenta atrás: viernes a las 16:00 (hora de España)
   fin: "2027-03-14T23:59:59+01:00",
   enlace: "https://www.escapadarural.com/casa-rural/soria/la-puerta-del-rio-lobos?capacity=20",        // URL de la casa (anuncio, web...). Vacío = el botón se oculta
   foto: "https://webp.er2.co/es/soria/5b7a991ee32e4/750/5b7ac3565fb8d.webp",          // URL o ruta de la foto de fondo, p. ej. "foto.jpg". Vacío = degradado
